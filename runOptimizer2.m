@@ -3,9 +3,9 @@ dt = 0.1;
 position = [0,0,210];
 velocity = .001;
 azimuth = 45;         %Degrees
-angleOfAttack = 45;   %Degrees
+angleOfAttack = 0;   %Degrees
 thrustDuration = 1.8;
-altitude = 210;
+altitude = position(3);
 returnData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 theta = 90 - angleOfAttack;
 phi = 90 - azimuth;
@@ -16,7 +16,9 @@ velocityZ = velocity*cosd(theta);
 
 velocityVector = [velocityX, velocityY, velocityZ];
 
-while altitude <= 220
+maxTime = 100;
+
+while time <= maxTime
     initialState = [position';velocityVector'];
     [t, solution] = ode45(@find_dxdt, [time, time+dt], initialState);
     [xDot, drag, thrust, mass, acceleration] = find_dxdt(time+dt, initialState);
@@ -40,42 +42,6 @@ while altitude <= 220
     position = position';
     velocityVector = velocityVector';
     % % %     normVelocityOutter = norm(velocityVector);
-end
-
-while altitude > 220
-    initialState = [position';velocityVector'];
-    [t, solution] = ode45(@find_dxdt, [time, time+dt], initialState);
-    [xDot, drag, thrust, mass, acceleration] = find_dxdt(time+dt, initialState);
-    newState = solution(end,:);
-    
-    normVelocityOutter = norm(velocityVector);
-    normAcceleration = norm(acceleration);
-    range = norm(position);
-    %     posH = position(1,1)*(cosd(phi));
-    %     flightAngle = asind(((((9.8066)*(range)/normVelocityOutter))^0.5)+45);
-    magXY = (((velocityVector(1,1)^2)+(velocityVector(1,2)^2))^.5);
-    flightAngle = atand(velocityVector(1,3)/magXY);
-    newIterationData = [time,position(1,1),position(1,2),position(1,3), velocityVector(1,1), velocityVector(1,2), velocityVector(1,3), normVelocityOutter, acceleration(1,1), acceleration(1,2), acceleration(1,3), normAcceleration, drag(1,1), drag(1,2), drag(1,3), mass, flightAngle];
-    
-    if newState(1,3) < 220
-        newState = solution(12,:);
-        position = newState(1:3);
-        time = t(12,:);
-        velocityVector = newState(4:6);
-        newIterationData = [time,position(1,1),position(1,2),position(1,3), velocityVector(1,1), velocityVector(1,2), velocityVector(1,3), normVelocityOutter, acceleration(1,1), acceleration(1,2), acceleration(1,3), normAcceleration, drag(1,1), drag(1,2), drag(1,3), mass, flightAngle];
-        altitude = 219;
-    else
-        position = newState(1:3)';
-        velocityVector = newState(4:6)';
-        altitude = position(3);
-    end
-    
-    time = time + dt;
-    
-    
-    returnData = cat(1,returnData, newIterationData);
-    position = position';
-    velocityVector = velocityVector';
 end
 
 timeData = returnData(:,1);
@@ -136,3 +102,4 @@ disp('Max Velocity:');
 disp(normVData(20,:));
 disp('at time:');
 disp(timeData(20,:));
+fprintf('Max Height %.2f km',max(zdata)/1000)
