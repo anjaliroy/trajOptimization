@@ -9,49 +9,7 @@ close all; clear all; clc;
 
 verbose         = true;
 
-%% Define Simulation Conditions
-maxTime_s       = 100;                              % maximum sim time
-dt              = 1;
-time            = 0:dt:maxTime_s;                              
+%% Define 
 
-
-%% Define Initial Conditions
-pos_i_m(1)      = 10;                                % position at t-0
-pos_i_m(2)      = 20;
-pos_i_m(3)      = 2;
-
-azl             = 45;
-alpha           = 0;                                % angle of attack
-theta           = 90 - alpha;
-phi             = 90 - azl;
-
-v_mag           = 0.001;                            % velocity at t-0
-vel_i_mps(1)    = v_mag*sind(theta)*cosd(phi);
-vel_i_mps(2)    = v_mag*sind(theta)*sind(phi);
-vel_i_mps(3)    = v_mag*cosd(theta);
-
-x0              = [pos_i_m, vel_i_mps]';             % initial state
-
-
-%% Vehicle Parameterss
-Vehicle.Cd                  = 0.5;
-Vehicle.gravity_mps2        = 9.8067; %gravity
-Vehicle.rocketDiameter_m    = 1.22;
-Vehicle.thrustDuration_s    = 3;
-Vehicle.thrustMagnitude_N   = 21525;
-Vehicle.dryMass_kg          = 845.2;
-Vehicle.totalMass_kg        = 15665.6;
-Vehicle.A_e_m2              = Vehicle.rocketDiameter_m;
-Vehicle.s                   = ((Vehicle.rocketDiameter_m/2)^2)*pi;
-
-
-%% Run Simulator
-[t, solution]   = ode45(@find_dxdt, time, x0, Vehicle);
-
-[t, solution]   = ode45(@find_dxdt, time, x0, Vehicle);
-
-%% Plot
-plotSingleCase;
-
-%% Metrics
-evaluateMetrics(solution, verbose);
+%% Run a Case
+[maxHeight_km, finalVelocity_kmps] = runCase(verbose);

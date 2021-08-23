@@ -1,4 +1,4 @@
-function [maxHeight_km, finalVelocity_kmps] = runCase(verbose)
+function [maxHeight_km, finalVelocity_kmps] = runCase(verbose, vars)
 %% Define Simulation Conditions
 maxTime_s       = 100;                              % maximum sim time
 dt              = 1;
@@ -26,12 +26,14 @@ x0              = [pos_i_m, vel_i_mps]';             % initial state
 %% Vehicle Parameterss
 Vehicle.Cd                  = 0.5;
 Vehicle.gravity_mps2        = 9.8067; %gravity
-Vehicle.rocketDiameter_m    = 1.22;
-Vehicle.thrustDuration_s    = 3;
-Vehicle.thrustMagnitude_N   = 21525;
-Vehicle.dryMass_kg          = 845.2;
+Vehicle.rocketDiameter_m    = 1.82;
+Vehicle.thrustDuration_s    = vars(1);
+Vehicle.thrustMagnitude_N   = vars(2);
 Vehicle.totalMass_kg        = 15665.6;
-Vehicle.A_e_m2              = Vehicle.rocketDiameter_m;
+massFraction                = 0.9460;
+Vehicle.dryMass_kg          = (1 - massFraction)*Vehicle.totalMass_kg;
+nozzleDiameterRatio         = vars(3);
+Vehicle.A_e_m2              = nozzleDiameterRatio*Vehicle.rocketDiameter_m;
 Vehicle.s                   = ((Vehicle.rocketDiameter_m/2)^2)*pi;
 
 

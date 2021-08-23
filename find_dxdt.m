@@ -12,10 +12,10 @@ massTable       = [Vehicle.totalMass_kg,
     Vehicle.dryMass_kg,
     Vehicle.dryMass_kg];
 
-pos_i    = x(1:3)';
-vel_i    = x(4:6)';
-altitude    = pos_i(3);
-normVel     = norm(vel_i);
+pos_i_m     = x(1:3)';
+vel_i_mps   = x(4:6)';
+altitude    = pos_i_m(3);
+normVel     = norm(vel_i_mps);
 
 
 [T_K, P_atm, rho, acousticSpeed] = getAtmoConditions(altitude);
@@ -26,7 +26,7 @@ mass_kg = interp1(timeTable, massTable, time, 'linear', 'extrap');
 thrustVac_N = (interp1(timeTable,thrustTable,time,'linear','extrap'));
 
 [a_mps2, F_gravity_N, F_drag_N, F_thrust_N] ...
-    = getAcceleration(mass_kg, pos_i, vel_i, Vehicle.s, rho, Vehicle.Cd, P_atm, Vehicle.A_e_m2, thrustVac_N);
+    = getAcceleration(mass_kg, pos_i_m, vel_i_mps, Vehicle.s, rho, Vehicle.Cd, P_atm, Vehicle.A_e_m2, thrustVac_N);
 
-xDot = [vel_i'; a_mps2'];
+xDot = [vel_i_mps'; a_mps2'];
 end
