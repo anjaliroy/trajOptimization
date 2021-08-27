@@ -42,7 +42,7 @@ Aeq             = [];
 beq             = [];
                
 %% Optimizer Options
-Optimizer = "Powell";
+Optimizer = "SQP";
 % "Interior-Point" or "SQP" or "Powell"
 
 %% Run Optimizer
