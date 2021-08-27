@@ -50,4 +50,4 @@ Optimizer = "Powell";
     = selectOptimizer(x0, Optimizer, A, b, Aeq, beq, lb, ub)
 
 %% Run Nominal Case w/ Optimized Inputs
-[maxHeight_km, finalVelocity_kmps, FPA_deg] = runCase(x, true);
+[maxHeight_km, finalVelocity_kmps, FPA_deg] = runCase(x, verbose);

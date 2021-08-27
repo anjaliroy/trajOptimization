@@ -9,3 +9,7 @@ paths = [convertCharsToStrings(fullfile(pwd,'Optimization'));
 for i = 1:length(paths)
     addpath(paths(i,:));
 end
+
+%% Clean Up
+cd(home);
+clear paths home
