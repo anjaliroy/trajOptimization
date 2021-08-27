@@ -1,6 +1,6 @@
 function [maxHeight_km, finalVelocity_kmps, FPA_deg] = runCase(vars, verbose)
 %% Define Simulation Conditions
-maxTime_s       = 200;                              % maximum sim time
+maxTime_s       = 500;                              % maximum sim time
 dt              = 1;
 time            = 0:dt:maxTime_s;                              
 
@@ -11,7 +11,7 @@ pos_i_m(2)      = 20;
 pos_i_m(3)      = 2;
 
 azl             = vars(4);
-alpha           = 0;                                % angle of attack
+alpha           = vars(5);                          % angle of attack
 theta           = 90 - alpha;
 phi             = 90 - azl;
 
@@ -26,11 +26,11 @@ x0              = [pos_i_m, vel_i_mps]';             % initial state
 %% Vehicle Parameterss
 Vehicle.Cd                  = 0.5;
 Vehicle.gravity_mps2        = 9.8067; %gravity
-Vehicle.rocketDiameter_m    = 1.22;
+Vehicle.rocketDiameter_m    = 1.82;
 Vehicle.thrustDuration_s    = vars(1);
-Vehicle.thrustMagnitude_N   = vars(2);
+Vehicle.thrustMagnitude_N   = vars(2)*1000;
 Vehicle.totalMass_kg        = 15665.6;
-massFraction                = 0.9460;
+massFraction                = 0.8460;
 Vehicle.dryMass_kg          = (1 - massFraction)*Vehicle.totalMass_kg;
 nozzleDiameterRatio         = vars(3);
 Vehicle.A_e_m2              = nozzleDiameterRatio*Vehicle.rocketDiameter_m;
