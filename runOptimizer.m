@@ -7,22 +7,47 @@
 %% Set-Up
 close all; clear all; clc;
 
-%% Define Simulation Conditions
-dt = 0.01;
+verbose         = true;
 
-%% Define Initial Conditions
-pos(1)      = 0;
-pos(2)      = 0;
-pos(3)      = 0;
+%% Define Variable Conditions
+x0              = [40           % thrust duration
+                12          % thrust magnitude
+                1               % nozzle:diameter ratio
+                45               % launch azimuth
+                15];            % angle of attack
+            
+nVars           = length(x0);
 
-azl         = 0;
-alpha       = 0;
-theta       = 90 - alpha;
-phi         = 90 - azl;
+%% Define Constraints
+A               = eye(nVars);
+b               = [100           % max thrust duration (s)
+                30              % max thrust (N)
+                1.5             % max nozzle:diameter ratio
+                60              % max launch azimuth
+                60];            % max angle of attack
 
-v_mag       = 0.001;
-vel(1)      = v_mag*sind(theta)*cosd(phi);
-vel(2)      = v_mag*sind(theta)*sind(phi);
-vel(3)      = v_mag*cosd(theta);
+lb              = [25
+                   5
+                   0.8
+                   0
+                   0];
+               
+ub              = [100
+                30
+                1.5
+                60
+                60];
+            
+Aeq             = [];
+beq             = [];
+               
+%% Optimizer Options
+Optimizer = "SQP";
+% "Interior-Point" or "SQP" or "Powell"
 
+%% Run Optimizer
+[x, nIters, runTime, fval] ...
+    = selectOptimizer(x0, Optimizer, A, b, Aeq, beq, lb, ub)
 
+%% Run Nominal Case w/ Optimized Inputs
+[maxHeight_km, finalVelocity_kmps, FPA_deg] = runCase(x, verbose);
