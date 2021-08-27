@@ -12,6 +12,7 @@ switch Optimizer
         tic
         [x,fval,exitflag,output]...
             = fmincon(@runOptimizationCase,x0,A,b,Aeq,beq,lb,ub,nonlcon,options);
+%         [x, nIters, fval] = interiorPoint(x, A, b, c)
         runTime = toc;
         nIters = output.iterations;
     case "SQP"
@@ -21,6 +22,7 @@ switch Optimizer
         tic
         [x,fval,exitflag,output]...
             = fmincon(@runOptimizationCase,x0,A,b,Aeq,beq,lb,ub,nonlcon,options);
+%         [x,fval,exitflag,output] = sqpSolve(x0,A,b,Aeq,beq,lb,ub,nonlcon,options)
         runTime = toc;
         nIters = output.iterations;
     case "Powell"

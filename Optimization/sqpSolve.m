@@ -1,6 +1,5 @@
 function [x,fval,exitflag,output] = sqpSolve(x0,A,b,Aeq,beq,lb,ub,nonlcon,options)
-% Assume the code failed
-exitflag = -1;
+% Based On: https://github.com/rensor/fminsqp
 
 x = x0;
 
@@ -170,10 +169,7 @@ while optimize
     history.nIter = iterNo;
     history.nFeval = nFeval;
     
-    if strcmpi(options.Display,'iter')
-        fprintf('\t %6.4e \t \t %6.4e \t \t %6.4e \t \t %10i \t \t %10i \n' ,f, maxInf, deltanorm, nFeval ,iterNo);
-    end
-    
+   
 end % Main loop
 
 history.f(iterNo+1:end)=[];
